@@ -1,0 +1,27 @@
+services:
+  opc_server:
+    build:
+      context: .
+    container_name: opc_server
+    command: python server.py
+    restart: on-failure
+    ports:
+      - "4840:4840"
+
+  client_publisher:
+    build:
+      context: .
+    container_name: client_publisher
+    command: python client_publisher.py
+    restart: on-failure
+    depends_on:
+      - opc_server
+
+  client_subscriber:
+    build:
+      context: .
+    container_name: client_subscriber
+    command: python client_subscriber.py
+    restart: on-failure
+    depends_on:
+      - opc_server
